@@ -19,23 +19,24 @@ class GrahamStack extends cdk.Stack {
         });
         */
 
-        const bucket = new s3.Bucket(this, `S3Bucket-${name}`, {
+        const bucket = new s3.Bucket(this, `${name}S3Bucket`, {
             bucketName: "static.mochizuki.moe",
             websiteIndexDocument: "index.html",
             websiteErrorDocument: "error.html"
         });
-        new s3Deploy.BucketDeployment(this, `S3BucketDeploy-${name}`, {
+
+        new s3Deploy.BucketDeployment(this, `${name}S3BucketDeployment`, {
             source: s3Deploy.Source.asset(path.resolve("./", "objects")),
             destinationBucket: bucket,
         });
 
-        const originId = new cloudfront.cloudformation.CloudFrontOriginAccessIdentityResource(this, `OriginAccessIdentity`, {
+        const originId = new cloudfront.cloudformation.CloudFrontOriginAccessIdentityResource(this, `${name}CloudFrontAccessIdentity`, {
             cloudFrontOriginAccessIdentityConfig: {
-                comment: "static.mochizuki.moe S3 access"
+                comment: "accessed by static.mochizuki.moe"
             },
         });
 
-        new cloudfront.CloudFrontWebDistribution(this, `CloudFront-${name}`, {
+        new cloudfront.CloudFrontWebDistribution(this, `${name}CloudFrontDistribution`, {
             aliasConfiguration: {
                 acmCertRef: "arn:aws:acm:us-east-1:011761533955:certificate/58d7ec39-e8d6-40c6-8697-5f6733be0b5b",
                 names: ["static.mochizuki.moe"],
