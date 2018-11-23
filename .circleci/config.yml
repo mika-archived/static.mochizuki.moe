@@ -36,8 +36,8 @@ jobs:
       - run:
           name: Install aws-cli
           command: |
-            apt update
-            apt install -y awscli
+            sudo apt update
+            sudo apt install -y awscli
 
       - run:
           name: Build
