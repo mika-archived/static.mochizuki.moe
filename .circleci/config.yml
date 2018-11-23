@@ -34,9 +34,20 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run:
+          name: Install aws-cli
+          command: |
+            apt update
+            apt install -y awscli
+
+      - run:
           name: Build
           command: |
             yarn run build
+
+      - run:
+          name: Configure AWS region
+          command: |
+            aws configure set region ap-northeast-1
 
       - deploy:
           name: Deployment
