@@ -20,7 +20,7 @@ class GrahamStack extends cdk.Stack {
         */
 
         const bucket = new s3.Bucket(this, `${name}S3Bucket`, {
-            bucketName: "static.mochizuki.moe",
+            bucketName: process.env.S3_BUCKET_NAME as string,
             websiteIndexDocument: "index.html",
             websiteErrorDocument: "error.html"
         });
@@ -38,8 +38,8 @@ class GrahamStack extends cdk.Stack {
 
         new cloudfront.CloudFrontWebDistribution(this, `${name}CloudFrontDistribution`, {
             aliasConfiguration: {
-                acmCertRef: "arn:aws:acm:us-east-1:011761533955:certificate/58d7ec39-e8d6-40c6-8697-5f6733be0b5b",
-                names: ["static.mochizuki.moe"],
+                acmCertRef: process.env.ACM_CERTIFICATE_ARN as string,
+                names: [process.env.CLOUDFRONT_ALIAS_NAME as string],
                 sslMethod: cloudfront.SSLMethod.SNI,
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLSv1_2_2018,
             },
